@@ -32,13 +32,20 @@ body {
   display: flex;
 }
 
-.in > div {
+.in > div,
+.out > div {
   flex: 1 1 auto;
-  padding: 0 10px;
+  padding: 10px;
+}
+
+select {
+  margin: 10px 0;
 }
 
 textarea {
   width: 100%;
+  margin: 10px 0;
+  padding: 4px;
   min-height: 200px;
   font-family: 'Lucida Console', Monaco, monospace;
 }
