@@ -61,8 +61,8 @@ class ClearButton extends Component {
 class App extends Component {
   state = {
     type: 'createSyncProducts',
-    before: '',
-    now: '',
+    before: '{"name":{"en":"Hajo"}}',
+    now: '{"name":{"en":"ojaH"}}',
     actionsView: ACTIONS_VIEWS.PLAIN,
   };
   handleStagedChange = event => {
