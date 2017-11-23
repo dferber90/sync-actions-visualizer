@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
 import {
@@ -14,55 +13,20 @@ import {
   createSyncCartDiscounts,
 } from '@commercetools/sync-actions';
 import './App.css';
+import FormatButton from './FormatButton';
+import ClearButton from './ClearButton';
+import { format } from './utils';
 
 const ACTIONS_VIEWS = {
   PLAIN: 'PLAIN',
   INSPECTOR: 'INSPECTOR',
 };
 
-const format = data => JSON.stringify(data, null, 2);
-
-const parseAndFormat = str => {
-  try {
-    const parsed = JSON.parse(str);
-    return format(parsed);
-  } catch (e) {
-    return str;
-  }
-};
-
-class FormatButton extends Component {
-  static propTypes = {
-    value: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-  };
-  render() {
-    return (
-      <button
-        onClick={() => {
-          this.props.onChange(parseAndFormat(this.props.value));
-        }}
-      >
-        Format
-      </button>
-    );
-  }
-}
-
-class ClearButton extends Component {
-  static propTypes = {
-    onClear: PropTypes.func.isRequired,
-  };
-  render() {
-    return <button onClick={() => this.props.onClear()}>Clear</button>;
-  }
-}
-
 class App extends Component {
   state = {
     type: 'createSyncProducts',
-    before: '{"name":{"en":"Hajo"}}',
-    now: '{"name":{"en":"ojaH"}}',
+    before: '{"name":{"en":"ojaH"}}',
+    now: '{"name":{"en":"Hajo"}}',
     actionsView: ACTIONS_VIEWS.PLAIN,
   };
   handleBeforeChange = event => {
@@ -166,17 +130,19 @@ class App extends Component {
           <div className="in">
             <div>
               <h3>Before</h3>
-              <FormatButton
-                value={this.state.before}
-                onChange={formatted => {
-                  this.setState({ before: formatted });
-                }}
-              />
-              <ClearButton
-                onClear={() => {
-                  this.setState({ before: '' });
-                }}
-              />
+              <div>
+                <FormatButton
+                  value={this.state.before}
+                  onChange={formatted => {
+                    this.setState({ before: formatted });
+                  }}
+                />
+                <ClearButton
+                  onClear={() => {
+                    this.setState({ before: '' });
+                  }}
+                />
+              </div>
               <textarea
                 value={this.state.before}
                 onChange={this.handleBeforeChange}
@@ -184,17 +150,19 @@ class App extends Component {
             </div>
             <div>
               <h3>Now</h3>
-              <FormatButton
-                value={this.state.now}
-                onChange={formatted => {
-                  this.setState({ now: formatted });
-                }}
-              />
-              <ClearButton
-                onClear={() => {
-                  this.setState({ now: '' });
-                }}
-              />
+              <div>
+                <FormatButton
+                  value={this.state.now}
+                  onChange={formatted => {
+                    this.setState({ now: formatted });
+                  }}
+                />
+                <ClearButton
+                  onClear={() => {
+                    this.setState({ now: '' });
+                  }}
+                />
+              </div>
               <textarea
                 value={this.state.now}
                 onChange={this.handleNowChange}
@@ -247,7 +215,6 @@ class App extends Component {
                     <Inspector
                       data={value.data}
                       filterOptions={{ ignoreCase: true }}
-                      isExpanded={() => true}
                     />
                   )}
                 </div>
