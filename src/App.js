@@ -170,7 +170,7 @@ class App extends Component {
             </div>
           </div>
           {areAllInputsFilled && (
-            <div id="out">
+            <div className="out">
               <h3>Actions</h3>
               <label htmlFor="plainActionsView">
                 <input
