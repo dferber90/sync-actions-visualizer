@@ -65,10 +65,10 @@ class App extends Component {
     now: '{"name":{"en":"ojaH"}}',
     actionsView: ACTIONS_VIEWS.PLAIN,
   };
-  handleStagedChange = event => {
+  handleBeforeChange = event => {
     this.setState({ before: event.target.value });
   };
-  handleDraftChange = event => {
+  handleNowChange = event => {
     this.setState({ now: event.target.value });
   };
   getValue = () => {
@@ -87,39 +87,39 @@ class App extends Component {
     switch (this.state.type) {
       case 'createSyncCategories': {
         const syncProducts = createSyncCategories();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncCustomers': {
         const syncProducts = createSyncCustomers();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncInventories': {
         const syncProducts = createSyncInventories();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncOrders': {
         const syncProducts = createSyncOrders();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncProducts': {
         const syncProducts = createSyncProducts();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncProductDiscounts': {
         const syncProducts = createSyncProductDiscounts();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncDiscountCodes': {
         const syncProducts = createSyncDiscountCodes();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncCustomerGroup': {
         const syncProducts = createSyncCustomerGroup();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncCartDiscounts': {
         const syncProducts = createSyncCartDiscounts();
-        return { data: syncProducts.buildActions(before, now) };
+        return { data: syncProducts.buildActions(now, before) };
       }
       default:
         return { error: `Unknown service "${this.state.type}"` };
@@ -129,7 +129,7 @@ class App extends Component {
     const value = this.getValue();
     const areAllInputsFilled =
       this.state.before.length > 0 && this.state.now.length > 0;
-    console.log(areAllInputsFilled);
+
     return (
       <div className="container">
         <div>
@@ -179,7 +179,7 @@ class App extends Component {
               />
               <textarea
                 value={this.state.before}
-                onChange={this.handleStagedChange}
+                onChange={this.handleBeforeChange}
               />
             </div>
             <div>
@@ -197,7 +197,7 @@ class App extends Component {
               />
               <textarea
                 value={this.state.now}
-                onChange={this.handleDraftChange}
+                onChange={this.handleNowChange}
               />
             </div>
           </div>
