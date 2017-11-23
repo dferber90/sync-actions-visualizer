@@ -15,6 +15,7 @@ import {
 import './App.css';
 import FormatButton from './FormatButton';
 import ClearButton from './ClearButton';
+import ActionGroupSelection from './ActionGroupSelection';
 import { format } from './utils';
 
 const ACTIONS_VIEWS = {
@@ -28,6 +29,7 @@ class App extends Component {
     before: '{"name":{"en":"ojaH"}}',
     now: '{"name":{"en":"Hajo"}}',
     actionsView: ACTIONS_VIEWS.PLAIN,
+    actionGroups: [],
   };
   handleBeforeChange = event => {
     this.setState({ before: event.target.value });
@@ -50,39 +52,41 @@ class App extends Component {
     }
     switch (this.state.type) {
       case 'createSyncCategories': {
-        const syncProducts = createSyncCategories();
+        const syncProducts = createSyncCategories(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncCustomers': {
-        const syncProducts = createSyncCustomers();
+        const syncProducts = createSyncCustomers(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncInventories': {
-        const syncProducts = createSyncInventories();
+        const syncProducts = createSyncInventories(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncOrders': {
-        const syncProducts = createSyncOrders();
+        const syncProducts = createSyncOrders(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncProducts': {
-        const syncProducts = createSyncProducts();
+        const syncProducts = createSyncProducts(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncProductDiscounts': {
-        const syncProducts = createSyncProductDiscounts();
+        const syncProducts = createSyncProductDiscounts(
+          this.state.actionGroups
+        );
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncDiscountCodes': {
-        const syncProducts = createSyncDiscountCodes();
+        const syncProducts = createSyncDiscountCodes(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncCustomerGroup': {
-        const syncProducts = createSyncCustomerGroup();
+        const syncProducts = createSyncCustomerGroup(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       case 'createSyncCartDiscounts': {
-        const syncProducts = createSyncCartDiscounts();
+        const syncProducts = createSyncCartDiscounts(this.state.actionGroups);
         return { data: syncProducts.buildActions(now, before) };
       }
       default:
@@ -125,6 +129,17 @@ class App extends Component {
             <option value="createSyncCustomerGroup">Customer Group</option>
             <option value="createSyncCartDiscounts">Cart Discounts</option>
           </select>
+        </div>
+        <div className="action-groups">
+          <h3>Action Groups</h3>
+          <div>
+            <ActionGroupSelection
+              value={this.state.actionGroups}
+              onChange={actionGroups => {
+                this.setState({ actionGroups });
+              }}
+            />
+          </div>
         </div>
         <div className="io">
           <div className="in">
@@ -180,7 +195,6 @@ class App extends Component {
                   checked={this.state.actionsView === ACTIONS_VIEWS.PLAIN}
                   value={ACTIONS_VIEWS.PLAIN}
                   onChange={e => {
-                    console.log(e);
                     this.setState({ actionsView: ACTIONS_VIEWS.PLAIN });
                   }}
                 />{' '}
@@ -195,7 +209,6 @@ class App extends Component {
                   checked={this.state.actionsView === ACTIONS_VIEWS.INSPECTOR}
                   value={ACTIONS_VIEWS.INSPECTOR}
                   onChange={e => {
-                    console.log(e);
                     this.setState({ actionsView: ACTIONS_VIEWS.INSPECTOR });
                   }}
                 />{' '}
