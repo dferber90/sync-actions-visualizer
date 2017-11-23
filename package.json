@@ -15,5 +15,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "deploy": "env-cmd .env s3_website push"
+  },
+  "devDependencies": {
+    "env-cmd": "7.0.0"
   }
 }
