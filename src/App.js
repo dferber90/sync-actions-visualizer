@@ -7,6 +7,7 @@ import {
   createSyncInventories,
   createSyncOrders,
   createSyncProducts,
+  createSyncProductTypes,
   createSyncProductDiscounts,
   createSyncDiscountCodes,
   createSyncCustomerGroup,
@@ -17,6 +18,8 @@ import FormatButton from './FormatButton';
 import ClearButton from './ClearButton';
 import ActionGroupSelection from './ActionGroupSelection';
 import { format } from './utils';
+import parseJson from 'parse-json';
+import pkg from '../package.json';
 
 const ACTIONS_VIEWS = {
   PLAIN: 'PLAIN',
@@ -41,53 +44,55 @@ class App extends Component {
     let before;
     let now;
     try {
-      before = JSON.parse(this.state.before);
+      before = parseJson(this.state.before);
     } catch (e) {
-      return { error: 'Could not parse "before"' };
+      return { source: 'before', error: e.toString() };
     }
     try {
-      now = JSON.parse(this.state.now);
+      now = parseJson(this.state.now);
     } catch (e) {
-      return { error: 'Could not parse "now"' };
+      return { source: 'now', error: e.toString() };
     }
     switch (this.state.type) {
       case 'createSyncCategories': {
-        const syncProducts = createSyncCategories(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncCategories(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncCustomers': {
-        const syncProducts = createSyncCustomers(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncCustomers(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncInventories': {
-        const syncProducts = createSyncInventories(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncInventories(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncOrders': {
-        const syncProducts = createSyncOrders(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncOrders(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncProducts': {
-        const syncProducts = createSyncProducts(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncProducts(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
+      }
+      case 'createSyncProductTypes': {
+        const sync = createSyncProductTypes(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncProductDiscounts': {
-        const syncProducts = createSyncProductDiscounts(
-          this.state.actionGroups
-        );
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncProductDiscounts(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncDiscountCodes': {
-        const syncProducts = createSyncDiscountCodes(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncDiscountCodes(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncCustomerGroup': {
-        const syncProducts = createSyncCustomerGroup(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncCustomerGroup(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       case 'createSyncCartDiscounts': {
-        const syncProducts = createSyncCartDiscounts(this.state.actionGroups);
-        return { data: syncProducts.buildActions(now, before) };
+        const sync = createSyncCartDiscounts(this.state.actionGroups);
+        return { data: sync.buildActions(now, before) };
       }
       default:
         return { error: `Unknown service "${this.state.type}"` };
@@ -109,6 +114,11 @@ class App extends Component {
           >
             Documentation
           </a>
+          <pre>
+            @commercetools/sync-actions v{
+              pkg.dependencies['@commercetools/sync-actions']
+            }
+          </pre>
         </div>
         <div>
           <select
@@ -122,6 +132,7 @@ class App extends Component {
             <option value="createSyncInventories">Inventories</option>
             <option value="createSyncOrders">Orders</option>
             <option value="createSyncProducts">Products</option>
+            <option value="createSyncProductTypes">Product Types</option>
             <option value="createSyncProductDiscounts">
               Product Discounts
             </option>
@@ -216,8 +227,9 @@ class App extends Component {
               </label>
 
               {value.error ? (
-                <div>
-                  <code>{value.error}</code>
+                <div style={{ padding: 2 }}>
+                  Could not parse <code>{value.source}</code>
+                  <pre>{value.error}</pre>
                 </div>
               ) : (
                 <div>

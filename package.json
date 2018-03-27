@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@commercetools/sync-actions": "1.12.0",
-    "react": "^16.1.1",
-    "react-dom": "^16.1.1",
+    "@commercetools/sync-actions": "1.22.0",
+    "parse-json": "4.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
     "react-json-inspector": "7.1.1",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -17,6 +18,7 @@
     "deploy": "env-cmd .env s3_website push"
   },
   "devDependencies": {
-    "env-cmd": "7.0.0"
+    "env-cmd": "7.0.0",
+    "prettier": "1.11.1"
   }
 }
