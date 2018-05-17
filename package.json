@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@commercetools/sync-actions": "1.23.0",
-    "parse-json": "4.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-json-inspector": "7.1.1",

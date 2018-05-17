@@ -18,7 +18,6 @@ import FormatButton from './FormatButton';
 import ClearButton from './ClearButton';
 import ActionGroupSelection from './ActionGroupSelection';
 import { format } from './utils';
-import parseJson from 'parse-json';
 import pkg from '../package.json';
 
 const ACTIONS_VIEWS = {
@@ -44,12 +43,12 @@ class App extends Component {
     let before;
     let now;
     try {
-      before = parseJson(this.state.before);
+      before = JSON.parse(this.state.before);
     } catch (e) {
       return { source: 'before', error: e.toString() };
     }
     try {
-      now = parseJson(this.state.now);
+      now = JSON.parse(this.state.now);
     } catch (e) {
       return { source: 'now', error: e.toString() };
     }
