@@ -17,7 +17,7 @@ import './App.css';
 import FormatButton from './FormatButton';
 import ClearButton from './ClearButton';
 import ActionGroupSelection from './ActionGroupSelection';
-import { format } from './utils';
+import { parse, format } from './utils';
 import pkg from '../package.json';
 
 const ACTIONS_VIEWS = {
@@ -48,12 +48,12 @@ class App extends Component {
     let before;
     let now;
     try {
-      before = JSON.parse(this.state.before);
+      before = parse(this.state.before);
     } catch (e) {
       return { source: 'before', error: e.toString() };
     }
     try {
-      now = JSON.parse(this.state.now);
+      now = parse(this.state.now);
     } catch (e) {
       return { source: 'now', error: e.toString() };
     }
