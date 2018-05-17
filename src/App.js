@@ -65,7 +65,7 @@ class App extends Component {
     return (
       <div className="container">
         <div>
-          <h1>Sync Action Visualizer</h1>
+          <h1>Sync Actions Visualizer</h1>
           <a
             href="https://commercetools.github.io/nodejs/sdk/api/syncActions.html"
             rel="noopener noreferrer"
