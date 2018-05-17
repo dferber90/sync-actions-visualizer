@@ -1,23 +1,12 @@
 import React, { Component } from 'react';
 import Inspector from 'react-json-inspector';
 import 'react-json-inspector/json-inspector.css';
-import {
-  createSyncCategories,
-  createSyncCustomers,
-  createSyncInventories,
-  createSyncOrders,
-  createSyncProducts,
-  createSyncProductTypes,
-  createSyncProductDiscounts,
-  createSyncDiscountCodes,
-  createSyncCustomerGroup,
-  createSyncCartDiscounts,
-} from '@commercetools/sync-actions';
 import './App.css';
 import FormatButton from './FormatButton';
+import ExampleDataButton from './ExampleDataButton';
 import ClearButton from './ClearButton';
 import ActionGroupSelection from './ActionGroupSelection';
-import { parse, format } from './utils';
+import { parse, format, getSyncActions } from './utils';
 import pkg from '../package.json';
 
 const ACTIONS_VIEWS = {
@@ -29,11 +18,13 @@ const stateToConfig = state => ({
   shouldOmitEmptyString: state.shouldOmitEmptyString === 'yes',
 });
 
+const initialType = 'createSyncProducts';
+
 class App extends Component {
   state = {
-    type: 'createSyncProducts',
-    before: '{"name":{"en":"ojaH"}}',
-    now: '{"name":{"en":"Hajo"}}',
+    type: initialType,
+    before: format({ name: { en: 'Hajo' } }),
+    now: format({ name: { en: 'ojaH' } }),
     actionsView: ACTIONS_VIEWS.PLAIN,
     actionGroups: [],
     shouldOmitEmptyString: 'no',
@@ -57,54 +48,13 @@ class App extends Component {
     } catch (e) {
       return { source: 'now', error: e.toString() };
     }
-    const config = stateToConfig(this.state);
-    switch (this.state.type) {
-      case 'createSyncCategories': {
-        const sync = createSyncCategories(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncCustomers': {
-        const sync = createSyncCustomers(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncInventories': {
-        const sync = createSyncInventories(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncOrders': {
-        const sync = createSyncOrders(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncProducts': {
-        const sync = createSyncProducts(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncProductTypes': {
-        const sync = createSyncProductTypes(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncProductDiscounts': {
-        const sync = createSyncProductDiscounts(
-          this.state.actionGroups,
-          config
-        );
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncDiscountCodes': {
-        const sync = createSyncDiscountCodes(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncCustomerGroup': {
-        const sync = createSyncCustomerGroup(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      case 'createSyncCartDiscounts': {
-        const sync = createSyncCartDiscounts(this.state.actionGroups, config);
-        return { data: sync.buildActions(now, before) };
-      }
-      default:
-        return { error: `Unknown service "${this.state.type}"` };
-    }
+    return getSyncActions({
+      now,
+      before,
+      type: this.state.type,
+      actionGroups: this.state.actionGroups,
+      config: stateToConfig(this.state),
+    });
   };
   render() {
     const value = this.getValue();
@@ -185,6 +135,10 @@ class App extends Component {
                   onChange={formatted => {
                     this.setState({ before: formatted });
                   }}
+                />{' '}
+                <ExampleDataButton
+                  type={this.state.type}
+                  onClick={data => this.setState({ before: format(data) })}
                 />
                 <div className="clear-button-container">
                   <ClearButton
@@ -207,6 +161,10 @@ class App extends Component {
                   onChange={formatted => {
                     this.setState({ now: formatted });
                   }}
+                />{' '}
+                <ExampleDataButton
+                  type={this.state.type}
+                  onClick={data => this.setState({ now: format(data) })}
                 />
                 <div className="clear-button-container">
                   <ClearButton
@@ -253,24 +211,38 @@ class App extends Component {
                 Inspector
               </label>
 
-              {value.error ? (
-                <div style={{ padding: 2 }}>
-                  Could not parse <code>{value.source}</code>
-                  <pre>{value.error}</pre>
-                </div>
-              ) : (
-                <div>
-                  {this.state.actionsView === ACTIONS_VIEWS.PLAIN && (
-                    <textarea value={format(value.data)} disabled={true} />
-                  )}
-                  {this.state.actionsView === ACTIONS_VIEWS.INSPECTOR && (
-                    <Inspector
-                      data={value.data}
-                      filterOptions={{ ignoreCase: true }}
-                    />
-                  )}
-                </div>
-              )}
+              {(() => {
+                if (value.error) {
+                  if (typeof value.error === 'string')
+                    return (
+                      <div style={{ padding: 2 }}>
+                        Could not parse <code>{value.source}</code>
+                        <pre>{value.error}</pre>
+                      </div>
+                    );
+                  else
+                    return (
+                      <div style={{ padding: 2 }}>
+                        Could not generate sync actions. See console for more
+                        information.
+                      </div>
+                    );
+                }
+
+                return (
+                  <div>
+                    {this.state.actionsView === ACTIONS_VIEWS.PLAIN && (
+                      <textarea value={format(value.data)} disabled={true} />
+                    )}
+                    {this.state.actionsView === ACTIONS_VIEWS.INSPECTOR && (
+                      <Inspector
+                        data={value.data}
+                        filterOptions={{ ignoreCase: true }}
+                      />
+                    )}
+                  </div>
+                );
+              })()}
             </div>
           )}
         </div>
