@@ -169,8 +169,8 @@ class App extends Component {
             </select>
             <div>
               <small>
-                Note that this only works with <code>Product Types</code> so
-                far.
+                Note that <code>shouldOmitEmptyString</code> only works with{' '}
+                <code>Product Types</code> so far.
               </small>
             </div>
           </div>
@@ -186,11 +186,13 @@ class App extends Component {
                     this.setState({ before: formatted });
                   }}
                 />
-                <ClearButton
-                  onClear={() => {
-                    this.setState({ before: '' });
-                  }}
-                />
+                <div className="clear-button-container">
+                  <ClearButton
+                    onClear={() => {
+                      this.setState({ before: '' });
+                    }}
+                  />
+                </div>
               </div>
               <textarea
                 value={this.state.before}
@@ -206,11 +208,13 @@ class App extends Component {
                     this.setState({ now: formatted });
                   }}
                 />
-                <ClearButton
-                  onClear={() => {
-                    this.setState({ now: '' });
-                  }}
-                />
+                <div className="clear-button-container">
+                  <ClearButton
+                    onClear={() => {
+                      this.setState({ now: '' });
+                    }}
+                  />
+                </div>
               </div>
               <textarea
                 value={this.state.now}

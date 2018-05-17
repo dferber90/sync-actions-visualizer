@@ -22,6 +22,10 @@ h1 {
   margin: 10px 0;
 }
 
+.clear-button-container {
+  float: right;
+}
+
 .container {
   display: flex;
   flex-direction: column;
