@@ -2,15 +2,17 @@
 # yarn lockfile v1
 
 
-"@commercetools/sync-actions@1.22.0":
-  version "1.22.0"
-  resolved "https://registry.yarnpkg.com/@commercetools/sync-actions/-/sync-actions-1.22.0.tgz#171363ae76975cd4620dcd051cb57d3e823d3b84"
+"@commercetools/sync-actions@1.23.0":
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/@commercetools/sync-actions/-/sync-actions-1.23.0.tgz#7a911a21c826c7c19300a3b668bc2f0511b661dd"
   dependencies:
-    fast-equals "1.0.6"
+    fast-equals "1.2.1"
     jsondiffpatch "0.2.4"
     lodash.flatten "4.4.0"
     lodash.foreach "4.5.0"
+    lodash.isequal "4.5.0"
     lodash.isnil "4.0.0"
+    lodash.shuffle "4.2.0"
     lodash.uniqwith "4.5.0"
 
 abab@^1.0.3:
@@ -2489,9 +2491,9 @@ fast-deep-equal@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.0.0.tgz#96256a3bc975595eb36d82e9929d060d893439ff"
 
-fast-equals@1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-1.0.6.tgz#72a4ee4b44859055a8680bea4d2354aaedbd3fba"
+fast-equals@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/fast-equals/-/fast-equals-1.2.1.tgz#aa1926b828213df4b528bfd9e21b17ba1c7d34cb"
 
 fast-json-stable-stringify@^2.0.0:
   version "2.0.0"
@@ -4000,6 +4002,10 @@ lodash.foreach@4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.foreach/-/lodash.foreach-4.5.0.tgz#1a6a35eace401280c7f06dddec35165ab27e3e53"
 
+lodash.isequal@4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+
 lodash.isnil@4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/lodash.isnil/-/lodash.isnil-4.0.0.tgz#49e28cd559013458c814c5479d3c663a21bfaa6c"
@@ -4007,6 +4013,10 @@ lodash.isnil@4.0.0:
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/lodash.memoize/-/lodash.memoize-4.1.2.tgz#bcc6c49a42a2840ed997f323eada5ecd182e0bfe"
+
+lodash.shuffle@4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/lodash.shuffle/-/lodash.shuffle-4.2.0.tgz#145b5053cf875f6f5c2a33f48b6e9948c6ec7b4b"
 
 lodash.template@^4.4.0:
   version "4.4.0"
