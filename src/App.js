@@ -25,6 +25,10 @@ const ACTIONS_VIEWS = {
   INSPECTOR: 'INSPECTOR',
 };
 
+const stateToConfig = state => ({
+  shouldOmitEmptyString: state.shouldOmitEmptyString === 'yes',
+});
+
 class App extends Component {
   state = {
     type: 'createSyncProducts',
@@ -32,6 +36,7 @@ class App extends Component {
     now: '{"name":{"en":"Hajo"}}',
     actionsView: ACTIONS_VIEWS.PLAIN,
     actionGroups: [],
+    shouldOmitEmptyString: 'no',
   };
   handleBeforeChange = event => {
     this.setState({ before: event.target.value });
@@ -52,45 +57,49 @@ class App extends Component {
     } catch (e) {
       return { source: 'now', error: e.toString() };
     }
+    const config = stateToConfig(this.state);
     switch (this.state.type) {
       case 'createSyncCategories': {
-        const sync = createSyncCategories(this.state.actionGroups);
+        const sync = createSyncCategories(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncCustomers': {
-        const sync = createSyncCustomers(this.state.actionGroups);
+        const sync = createSyncCustomers(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncInventories': {
-        const sync = createSyncInventories(this.state.actionGroups);
+        const sync = createSyncInventories(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncOrders': {
-        const sync = createSyncOrders(this.state.actionGroups);
+        const sync = createSyncOrders(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncProducts': {
-        const sync = createSyncProducts(this.state.actionGroups);
+        const sync = createSyncProducts(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncProductTypes': {
-        const sync = createSyncProductTypes(this.state.actionGroups);
+        const sync = createSyncProductTypes(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncProductDiscounts': {
-        const sync = createSyncProductDiscounts(this.state.actionGroups);
+        const sync = createSyncProductDiscounts(
+          this.state.actionGroups,
+          config
+        );
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncDiscountCodes': {
-        const sync = createSyncDiscountCodes(this.state.actionGroups);
+        const sync = createSyncDiscountCodes(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncCustomerGroup': {
-        const sync = createSyncCustomerGroup(this.state.actionGroups);
+        const sync = createSyncCustomerGroup(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       case 'createSyncCartDiscounts': {
-        const sync = createSyncCartDiscounts(this.state.actionGroups);
+        const sync = createSyncCartDiscounts(this.state.actionGroups, config);
         return { data: sync.buildActions(now, before) };
       }
       default:
@@ -101,6 +110,7 @@ class App extends Component {
     const value = this.getValue();
     const areAllInputsFilled =
       this.state.before.length > 0 && this.state.now.length > 0;
+    const version = pkg.dependencies['@commercetools/sync-actions'];
 
     return (
       <div className="container">
@@ -113,13 +123,10 @@ class App extends Component {
           >
             Documentation
           </a>
-          <pre>
-            @commercetools/sync-actions v{
-              pkg.dependencies['@commercetools/sync-actions']
-            }
-          </pre>
+          <pre>@commercetools/sync-actions v{version}</pre>
         </div>
         <div>
+          Service{' '}
           <select
             value={this.state.type}
             onChange={event => {
@@ -140,15 +147,32 @@ class App extends Component {
             <option value="createSyncCartDiscounts">Cart Discounts</option>
           </select>
         </div>
-        <div className="action-groups">
-          <h3>Action Groups</h3>
-          <div>
+        <div>
+          <div className="action-groups">
             <ActionGroupSelection
               value={this.state.actionGroups}
               onChange={actionGroups => {
                 this.setState({ actionGroups });
               }}
             />
+          </div>
+          <div className="options">
+            <code>shouldOmitEmptyString</code>{' '}
+            <select
+              value={this.state.shouldOmitEmptyString}
+              onChange={event => {
+                this.setState({ shouldOmitEmptyString: event.target.value });
+              }}
+            >
+              <option value="no">No (default)</option>
+              <option value="yes">Yes</option>
+            </select>
+            <div>
+              <small>
+                Note that this only works with <code>Product Types</code> so
+                far.
+              </small>
+            </div>
           </div>
         </div>
         <div className="io">
@@ -196,7 +220,7 @@ class App extends Component {
           </div>
           {areAllInputsFilled && (
             <div className="out">
-              <h3>Actions</h3>
+              <h3>Generated Actions</h3>
               <label htmlFor="plainActionsView">
                 <input
                   type="radio"

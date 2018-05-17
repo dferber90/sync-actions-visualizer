@@ -46,6 +46,7 @@ export default class ActionGroupSelection extends Component {
             this.setState({ addType: '', addGroup: null });
           }}
         >
+          Action Groups{' '}
           <input
             type="text"
             value={this.state.addType}
@@ -67,7 +68,6 @@ export default class ActionGroupSelection extends Component {
             />{' '}
             Black
           </label>
-
           <label htmlFor="add-white">
             <input
               type="radio"
